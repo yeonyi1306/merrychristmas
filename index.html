@@ -345,8 +345,10 @@ function drawTree() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     const cx = canvas.width / 2;
-    const baseY = canvas.height * 0.85;
-    const height = canvas.height * 0.6;
+const visibleHeight = window.innerHeight;
+
+const baseY = visibleHeight * 0.72;
+const height = visibleHeight * 0.42;
 
     const layers = 220; // càng lớn càng mịn
 
@@ -416,3 +418,4 @@ drawTree();
 
 </body>
 </html>
+
