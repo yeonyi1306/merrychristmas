@@ -45,8 +45,6 @@
         0 0 30px #FFD700;
 }
 h2 {
-    align-items: center;
-    justify-content: center;
     font-size: 40px;
     font-family: 'Baloo 2', cursive;
     color:#165c32;
@@ -206,20 +204,7 @@ h2 {
 p {
     font-size: 18px;
 }
-/* 📱 MOBILE NHỎ (iPhone, Android) */
-@media (max-width: 480px) {
 
-.text-center {
-    font-size: 44px; /* TO RÕ HƠN */
-    padding: 0 20px;
-    line-height: 1.2;
-}
-
-.volume-hint {
-    font-size: 16px;
-    margin-top: 10px;
-}
-}
 </style>
 </head>
 
@@ -360,13 +345,8 @@ function drawTree() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     const cx = canvas.width / 2;
-    const base = isMobile 
-    ? canvas.height * 0.78
-    : canvas.height * 0.85;
-
-    const height = isMobile 
-    ? canvas.height * 0.45  // mobile: NGẮN LẠI
-    : canvas.height * 0.6;  // desktop giữ nguyên
+    const baseY = canvas.height * 0.85;
+    const height = canvas.height * 0.6;
 
     const layers = 220; // càng lớn càng mịn
 
