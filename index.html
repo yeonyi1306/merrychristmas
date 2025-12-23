@@ -22,7 +22,8 @@
     justify-content: center;
 
     text-align: center;
-    font-size: 60px;
+    font-size: clamp(36px, 6vw, 64px);
+
     animation: float 3s ease-in-out infinite;
 
     z-index: 2;
@@ -194,8 +195,8 @@ h2 {
     pointer-events: none;
 }
 .volume-hint{
-    margin-top: 12px;
-    font-size: 18px;
+    margin-top: 10px;
+    font-size: clamp(14px, 3.8vw, 18px);
     font-family: 'Baloo 2', cursive;
     color: rgba(255, 255, 255, 0.85);
     text-shadow: 0 0 6px rgba(255,255,255,0.6);
@@ -345,30 +346,36 @@ function drawTree() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     const cx = canvas.width / 2;
-    const baseY = canvas.height * 0.85;
-    const height = canvas.height * 0.6;
+    const isMobile = window.innerWidth <= 768;
 
-    const layers = 220; // càng lớn càng mịn
+    /* 🔒 chiều cao thật */
+    const visibleHeight = window.innerHeight;
+    const baseY = isMobile ? visibleHeight * 0.72 : visibleHeight * 0.85;
+    const height = isMobile ? visibleHeight * 0.42 : visibleHeight * 0.6;
+
+    /* 🔒 số lớp */
+    const layers = isMobile ? 140 : 220;
+
+    /* 🔒 bán kính tối đa (rất quan trọng) */
+    const maxRadius = Math.min(window.innerWidth * 0.32, 180);
 
     for (let i = 0; i < layers; i++) {
-        const p = i / layers;        // 0 → 1
+        const p = i / layers;
         const y = baseY - p * height;
 
-        // bán kính tạo hình cây
-        const radius = (1 - p) * 220;
+        const radius = (1 - p) * maxRadius;
 
-        // xoắn ốc
         const angle = p * Math.PI * 8 + time;
-
         const x = cx + Math.cos(angle) * radius;
 
-        // kích thước sao
-        const size = 2 + (1 - p) * 3;
+        const size = isMobile
+            ? 2 + (1 - p) * 2
+            : 2 + (1 - p) * 3;
 
         drawStar(x, y, size, 12);
 
-        // ✨ bụi sao nhỏ xung quanh
-        if (Math.random() < 0.25) {
+        /* ✨ bụi sao */
+        if (!isMobile && Math.random() < 0.25) {
             ctx.beginPath();
             ctx.arc(
                 x + (Math.random() - 0.5) * 15,
@@ -382,19 +389,13 @@ function drawTree() {
         }
     }
 
-    /* 🌟 SAO ĐỈNH CÂY */
-    drawStar(cx, baseY - height - 15, 10, 30);
-    
-    /* 🌟 SAO CHÂN CÂY */
-    ctx.beginPath();
-    ctx.arc(cx, baseY + 10, 6, 0, Math.PI * 2);
-    ctx.fillStyle = "#FFD700";
-    ctx.shadowBlur = 40;
-    ctx.fill();
+    /* 🌟 sao đỉnh */
+    drawStar(cx, baseY - height - 12, isMobile ? 8 : 10, 30);
 
-    time += 0.01;
+    time += isMobile ? 0.008 : 0.01;
     requestAnimationFrame(drawTree);
 }
+
 /*đèn*/
 function drawLight(x, y, size, alpha) {
     ctx.beginPath();
@@ -416,4 +417,5 @@ drawTree();
 
 </body>
 </html>
+
 
